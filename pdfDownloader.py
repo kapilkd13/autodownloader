@@ -7,7 +7,7 @@ Created on 16-Nov-2016
 import webbrowser, sys, pyperclip,requests,os,bs4,re
 
 def downloadFile(filename,foldername,res):
-    downloadDirectry='/home/kapil/Downloads'
+    downloadDirectry='/home/kapil/Downloads/pdf downloader'
     fileDirectory=downloadDirectry+'/'+foldername
     os.makedirs(fileDirectory, exist_ok=True)  #create folder for downloaded files
     file = open(os.path.join(fileDirectory, filename), 'wb')
@@ -54,20 +54,18 @@ else:
     
     #add file type to enhance more result oriented search
     enhancedAddress='file type '+address
-    #open the link in google
-webbrowser.open('https://www.google.com/search?q=' + enhancedAddress)
+   
 #download the html page at the mentioned locatiin to read it
 urlAddress='https://www.google.com/search?q=' + enhancedAddress
+ #open the link in google
+#webbrowser.open('https://www.google.com/search?q=' + enhancedAddress)
 res=requestPage(urlAddress)
-#genrate a filename to store the downloaded file file type pdf microprocessor ray bhurchandi
-filename=address.replace(' ', '.')
-foldername=address.replace(' ','-')
-#filename+='.html'
-downloadFile(filename,foldername, res)
+#genrate a filename to store the downloaded file file type pdf eco ray bhurchandi
 try:
     res.raise_for_status()
 except Exception as exc:
     print('There was a problem: %s' % (exc))
+   
 soup = bs4.BeautifulSoup(res.text,"html.parser")
 linkElems = soup.select('.r a')
 validlinks=checkValidLinks(linkElems)
@@ -77,8 +75,14 @@ if(validlinks!=None):
     numOpen = min(5, len(validlinks))
 else:
     numOpen=0
+    
+foldername=address.replace(' ','-')
+print('folder: '+foldername)
 for i in range(numOpen):
-    webbrowser.open('http://google.com' + validlinks[i])
+    trueLink=re.split(r'&',str(validlinks[i]))
+    filename = str(trueLink[0]).split('/')[-1]
+    downloadFile(filename,foldername, requestPage('http://google.com' + str(validlinks[i])))
+   # webbrowser.open('http://google.com' + str(validlinks[i]))
     
     
     #TODO
