@@ -6,9 +6,11 @@ Created on 16-Nov-2016
 #! python3
 import webbrowser, sys, pyperclip,requests,os,bs4,re
 
-def downloadFile(filename,res):
-    directry='/home/kapil/Downloads'
-    file = open(os.path.join(directry, filename), 'wb')
+def downloadFile(filename,foldername,res):
+    downloadDirectry='/home/kapil/Downloads'
+    fileDirectory=downloadDirectry+'/'+foldername
+    os.makedirs(fileDirectory, exist_ok=True)  #create folder for downloaded files
+    file = open(os.path.join(fileDirectory, filename), 'wb')
     for chunk in res.iter_content(100000):
             file.write(chunk)
 
@@ -49,15 +51,19 @@ if len(sys.argv) > 1:
 else:
 # Get address from clipboard.
     address = pyperclip.paste()
+    
+    #add file type to enhance more result oriented search
+    enhancedAddress='file type '+address
     #open the link in google
-webbrowser.open('https://www.google.com/search?q=' + address)
+webbrowser.open('https://www.google.com/search?q=' + enhancedAddress)
 #download the html page at the mentioned locatiin to read it
-urlAddress='https://www.google.com/search?q=' + address
+urlAddress='https://www.google.com/search?q=' + enhancedAddress
 res=requestPage(urlAddress)
-#genrate a filename to store the downloaded file file type pdf database management
+#genrate a filename to store the downloaded file file type pdf microprocessor ray bhurchandi
 filename=address.replace(' ', '.')
+foldername=address.replace(' ','-')
 #filename+='.html'
-downloadFile(filename, res)
+downloadFile(filename,foldername, res)
 try:
     res.raise_for_status()
 except Exception as exc:
