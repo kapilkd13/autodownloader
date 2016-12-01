@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3.4
 '''
 Created on 16-Nov-2016
 
@@ -5,7 +6,7 @@ Created on 16-Nov-2016
 '''
 #! python3
 import webbrowser, sys, pyperclip,requests,os,bs4,re
-
+type='pdf' #default
 def downloadFile(filename,foldername,res):
     downloadDirectry='/home/kapil/Downloads/pdf downloader'
     fileDirectory=downloadDirectry+'/'+foldername
@@ -16,7 +17,7 @@ def downloadFile(filename,foldername,res):
 
            
 def checkValidLinks(linkElems):
-    type='pdf'
+    
     validlinks=[]
     if(type=='pdf'):
         for l in linkElems:
@@ -48,12 +49,17 @@ def requestPage(urlAddress):
 if len(sys.argv) > 1:
 # Get address from command line.
     address = ' '.join(sys.argv[1:])
+    if(str(sys.argv[1]).lower()=='ppt'):
+        type='ppt'  
+        #similarly add more types in future 
+    
 else:
 # Get address from clipboard.
     address = pyperclip.paste()
-    
+    if(str(address.split(sep=' ')[0]).lower()=='ppt'):
+        type='ppt'
     #add file type to enhance more result oriented search
-    enhancedAddress='file type '+address
+enhancedAddress='file type '+address
    
 #download the html page at the mentioned locatiin to read it
 urlAddress='https://www.google.com/search?q=' + enhancedAddress
